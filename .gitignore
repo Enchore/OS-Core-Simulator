@@ -1,0 +1,28 @@
+# C 編譯產物
+*.o
+*.out
+*.exe
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+
+# 虛擬環境
+venv/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 操作系統
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 日誌
+*.log
