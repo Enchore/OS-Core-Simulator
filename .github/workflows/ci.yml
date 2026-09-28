@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build-c:
+    name: 编译 C 模块 (gcc)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Build process + ipc modules
+        # 仓库里的 Makefile 编译 process/producer_consumer.c 与 ipc/rps_game.c
+        run: make
+
+      - name: Show built binaries
+        run: ls -l process/producer_consumer ipc/rps_game
+
+      - name: Clean
+        run: make clean
+
+  test-python:
+    name: pytest (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.13"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install test dependencies
+        # 模拟器只用标准库，这里只需要 pytest
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+
+      - name: Syntax check
+        run: python -m compileall -q .
+
+      - name: Run tests
+        run: python -m pytest
