@@ -1,5 +1,8 @@
 # OS-Core-Simulator — 作業系統核心機制模擬
 
+[![CI](https://github.com/Enchore/OS-Core-Simulator/actions/workflows/ci.yml/badge.svg)](https://github.com/Enchore/OS-Core-Simulator/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 > 作業系統核心機制模擬 | Operating System Core Mechanism Simulator
 
 ## 項目簡介
