@@ -19,4 +19,5 @@ ipc:
 
 clean:
 	rm -f $(PREFIX)/process/producer_consumer $(PREFIX)/ipc/rps_game
-	rm -f $(PREFIX)/**/*.o
+	rm -f $(PREFIX)/process/producer_consumer.exe $(PREFIX)/ipc/rps_game.exe
+	find $(PREFIX) -type f -name '*.o' -delete

@@ -80,9 +80,8 @@ class FileSystemSimulator:
         user = self._users.get(username)
         if user and user.password == password:
             self._current_user = user
-            self._current_dir = self._navigate_to("/home/" + username)
-            if not self._current_dir:
-                self._current_dir = self._root
+            home_dir = self._resolve_path(user.home)
+            self._current_dir = home_dir if home_dir else self._root
             return True
         return False
 
@@ -129,9 +128,23 @@ class FileSystemSimulator:
         return f"cat: {name}: 沒有那個文件或目錄"
 
     def pwd(self) -> str:
-        """顯示當前路徑。"""
-        # TODO: 從當前節點反向構建路徑
-        return "/"
+        """顯示當前路徑（從根節點遞歸查找當前目錄）。"""
+        if self._current_dir is self._root:
+            return "/"
+        return self._find_path(self._root, self._current_dir) or "/"
+
+    def _find_path(self, current: FSNode, target: FSNode,
+                   prefix: str = "") -> Optional[str]:
+        """內部方法：遞歸查找目標節點的絕對路徑。"""
+        if current is target:
+            return prefix or "/"
+        for name, child in current.children.items():
+            if name in (".", "..") or child is current or not child.is_dir:
+                continue
+            found = self._find_path(child, target, f"{prefix}/{name}")
+            if found:
+                return found
+        return None
 
     def chmod(self, name: str, permissions: str) -> bool:
         """修改文件權限。"""
